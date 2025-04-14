@@ -13,6 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     let onboardingContainerViewController = OnboardingContainerViewController()
     let loginViewController = LoginViewController()
+    let homeViewController = HomeViewController()
 
     func application(
         _ application: UIApplication,
@@ -25,19 +26,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         loginViewController.delegate = self
         onboardingContainerViewController.delegate = self
-        window?.rootViewController = onboardingContainerViewController
+        homeViewController.delegate = self
+        
+        window?.rootViewController =
+        LocalState.hasOnboarded ? loginViewController : onboardingContainerViewController
+        
         return true
     }
 }
 
 extension AppDelegate: LoginViewControllerDelegate {
     func didLogin() {
-        print("foo = Logged in")
+        setRootViewController(homeViewController)
     }
 }
 
 extension AppDelegate: OnboardingContainerViewControllerDelegate {
     func didFinishOnboarding() {
+        LocalState.hasOnboarded = true
+        setRootViewController(loginViewController)
+    }
+}
+
+extension AppDelegate: HomeViewControllerDelegate {
+    func didLogout() {
         setRootViewController(loginViewController)
     }
 }

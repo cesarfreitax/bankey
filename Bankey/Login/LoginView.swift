@@ -41,6 +41,7 @@ extension LoginView {
         
         usernameTextField.translatesAutoresizingMaskIntoConstraints = false
         usernameTextField.placeholder = "Username"
+        usernameTextField.autocapitalizationType = .none
         usernameTextField.delegate = self
         
         divider.translatesAutoresizingMaskIntoConstraints = false
