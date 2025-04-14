@@ -10,14 +10,55 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
-    
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+
+    let onboardingContainerViewController = OnboardingContainerViewController()
+    let loginViewController = LoginViewController()
+
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication
+            .LaunchOptionsKey: Any]?
+    ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.backgroundColor = .systemBackground
-        window?.rootViewController = LoginViewController()
-        
+
+        loginViewController.delegate = self
+        onboardingContainerViewController.delegate = self
+        window?.rootViewController = onboardingContainerViewController
         return true
     }
 }
 
+extension AppDelegate: LoginViewControllerDelegate {
+    func didLogin() {
+        print("foo = Logged in")
+    }
+}
+
+extension AppDelegate: OnboardingContainerViewControllerDelegate {
+    func didFinishOnboarding() {
+        setRootViewController(loginViewController)
+    }
+}
+
+extension AppDelegate {
+    func setRootViewController(_ vc: UIViewController, _ animated: Bool = true)
+    {
+        guard animated, let window = window else {
+            window?.rootViewController = vc
+            window?.makeKeyAndVisible()
+            return
+        }
+
+        window.rootViewController = vc
+        window.makeKeyAndVisible()
+        UIView.transition(
+            with: window,
+            duration: 0.3,
+            options: .transitionCrossDissolve,
+            animations: nil,
+            completion: nil
+        )
+    }
+}
