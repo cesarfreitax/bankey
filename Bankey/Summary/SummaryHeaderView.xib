@@ -17,15 +17,74 @@
         <view contentMode="scaleToFill" id="iN0-l3-epB">
             <rect key="frame" x="0.0" y="0.0" width="393" height="144"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="8wU-KL-ynv">
+                    <rect key="frame" x="16" y="16" width="361" height="100"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="0ie-ps-hex">
+                            <rect key="frame" x="0.0" y="0.0" width="253" height="100"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Hello," textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M19-J7-eu5">
+                                    <rect key="frame" x="0.0" y="0.0" width="43.333333333333336" height="20.333333333333332"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="César!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="998-01-yjR">
+                                    <rect key="frame" x="0.0" y="28.333333333333336" width="49.333333333333336" height="20.333333333333336"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Good morning." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Emf-oS-gAC">
+                                    <rect key="frame" x="0.0" y="56.666666666666679" width="113.33333333333333" height="20.333333333333336"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="25 de abril de 2025" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fCd-6i-brf">
+                                    <rect key="frame" x="0.0" y="85" width="148.66666666666666" height="15"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                        </stackView>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sun.min.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="f7y-TB-E7w">
+                            <rect key="frame" x="261" y="1" width="100" height="98.333333333333329"/>
+                            <color key="tintColor" systemColor="systemYellowColor"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="100" id="hlk-ah-At6"/>
+                                <constraint firstAttribute="height" constant="100" id="vTl-uv-pnG"/>
+                            </constraints>
+                        </imageView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="0ie-ps-hex" secondAttribute="bottom" id="62c-EZ-Far"/>
+                        <constraint firstItem="f7y-TB-E7w" firstAttribute="leading" secondItem="0ie-ps-hex" secondAttribute="trailing" constant="8" id="BLt-2o-cdt"/>
+                        <constraint firstItem="0ie-ps-hex" firstAttribute="top" secondItem="8wU-KL-ynv" secondAttribute="top" id="Bvd-za-2Hv"/>
+                        <constraint firstAttribute="bottom" secondItem="f7y-TB-E7w" secondAttribute="bottom" id="OzO-S6-Jk7"/>
+                        <constraint firstItem="0ie-ps-hex" firstAttribute="leading" secondItem="8wU-KL-ynv" secondAttribute="leading" id="eYA-rM-J7v"/>
+                        <constraint firstItem="f7y-TB-E7w" firstAttribute="top" secondItem="8wU-KL-ynv" secondAttribute="top" id="kXb-Ea-3AV"/>
+                        <constraint firstAttribute="trailing" secondItem="f7y-TB-E7w" secondAttribute="trailing" id="vAS-u6-pdJ"/>
+                    </constraints>
+                </stackView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fVP-GY-I2R"/>
+            <constraints>
+                <constraint firstItem="8wU-KL-ynv" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="783-GY-app"/>
+                <constraint firstAttribute="bottom" secondItem="8wU-KL-ynv" secondAttribute="bottom" priority="999" constant="16" id="OGA-fR-ONA"/>
+                <constraint firstAttribute="trailing" secondItem="8wU-KL-ynv" secondAttribute="trailing" priority="999" constant="16" id="gs1-ct-8nD"/>
+                <constraint firstItem="8wU-KL-ynv" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="16" id="wUd-Cv-eF3"/>
+            </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="139.69465648854961" y="-189.78873239436621"/>
+            <point key="canvasLocation" x="139.69465648854961" y="-190.14084507042256"/>
         </view>
     </objects>
     <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        <image name="sun.min.fill" catalog="system" width="128" height="123"/>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
