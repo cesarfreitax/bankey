@@ -7,10 +7,13 @@
 
 import UIKit
 
+let appColor: UIColor = .systemTeal
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
+    let mainViewController = MainViewController()
     let onboardingContainerViewController = OnboardingContainerViewController()
     let loginViewController = LoginViewController()
     let homeViewController = HomeViewController()
@@ -28,8 +31,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         onboardingContainerViewController.delegate = self
         homeViewController.delegate = self
         
-        window?.rootViewController =
-        LocalState.hasOnboarded ? loginViewController : onboardingContainerViewController
+//        window?.rootViewController =
+//        LocalState.hasOnboarded ? loginViewController : onboardingContainerViewController
+        
+        window?.rootViewController = mainViewController
         
         return true
     }
