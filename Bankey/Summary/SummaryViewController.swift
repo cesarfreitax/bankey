@@ -25,6 +25,7 @@ class SummaryViewController: UIViewController {
 
     extension SummaryViewController {
         private func setup() {
+            tableView.translatesAutoresizingMaskIntoConstraints = false
             setupTableView()
             setupTableHeaderView()
         }
@@ -33,7 +34,10 @@ class SummaryViewController: UIViewController {
             tableView.delegate = self
             tableView.dataSource = self
             
-            tableView.translatesAutoresizingMaskIntoConstraints = false
+            tableView.register(SummaryCell.self, forCellReuseIdentifier: SummaryCell.reuseID)
+            tableView.rowHeight = SummaryCell.rowHeight
+            tableView.tableFooterView = UIView()
+            
             view.addSubview(tableView)
             
             NSLayoutConstraint.activate([
@@ -47,8 +51,7 @@ class SummaryViewController: UIViewController {
 
     extension SummaryViewController: UITableViewDataSource {
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = UITableViewCell()
-            cell.textLabel?.text = games[indexPath.row]
+            let cell = tableView.dequeueReusableCell(withIdentifier: SummaryCell.reuseID, for: indexPath) as! SummaryCell
             return cell
         }
         
