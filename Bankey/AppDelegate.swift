@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let onboardingContainerViewController = OnboardingContainerViewController()
     let loginViewController = LoginViewController()
     let homeViewController = HomeViewController()
-
+    
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication
@@ -27,11 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         window?.backgroundColor = .systemBackground
 
-        loginViewController.delegate = self
-        onboardingContainerViewController.delegate = self
-        homeViewController.delegate = self
+        setDelegates()
         
-        window?.rootViewController = mainViewController
+        window?.rootViewController = loginViewController
         
         return true
     }
@@ -78,5 +76,11 @@ extension AppDelegate {
             animations: nil,
             completion: nil
         )
+    }
+    
+    func setDelegates() {
+        loginViewController.delegate = self
+        onboardingContainerViewController.delegate = self
+        homeViewController.delegate = self
     }
 }
