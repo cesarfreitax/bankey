@@ -18,6 +18,8 @@ class SummaryCell: UITableViewCell {
     
     let balanceDetailsImageButton = UIImageView()
     
+    let viewModel: ViewModel? = nil
+    
     static let reuseID = "SummaryCell"
     static let rowHeight: CGFloat = 100
     
@@ -116,5 +118,41 @@ extension SummaryCell {
         rootString.append(centString)
         
         return rootString
+    }
+}
+
+extension SummaryCell {
+    enum AccountType: String {
+        case Banking
+        case CreditCard
+        case Investment
+    }
+    
+    struct ViewModel {
+        let accountType: AccountType
+        let accountName: String
+        let balance: Decimal
+        
+        var balanceAsAttributedString: NSAttributedString {
+            return CurrencyFormatter().makeAttributedCurrency(balance)
+        }
+    }
+}
+
+extension SummaryCell {
+    func configure(with vm: ViewModel) {
+        
+        typeLabel.text = vm.accountType.rawValue
+        nameLabel.text = vm.accountName
+        balanceAmountLabel.attributedText = vm.balanceAsAttributedString
+        
+        switch vm.accountType {
+        case .Banking:
+            underlineView.backgroundColor = appColor
+        case .CreditCard:
+            underlineView.backgroundColor = .systemOrange
+        case .Investment:
+            underlineView.backgroundColor = .systemPurple
+        }
     }
 }

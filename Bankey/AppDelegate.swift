@@ -31,9 +31,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         onboardingContainerViewController.delegate = self
         homeViewController.delegate = self
         
-//        window?.rootViewController =
-//        LocalState.hasOnboarded ? loginViewController : onboardingContainerViewController
-        
         window?.rootViewController = mainViewController
         
         return true
@@ -42,14 +39,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate: LoginViewControllerDelegate {
     func didLogin() {
-        setRootViewController(homeViewController)
+        if LocalState.hasOnboarded {
+            setRootViewController(mainViewController)
+        } else {
+            setRootViewController(onboardingContainerViewController)
+        }
     }
 }
 
 extension AppDelegate: OnboardingContainerViewControllerDelegate {
     func didFinishOnboarding() {
         LocalState.hasOnboarded = true
-        setRootViewController(loginViewController)
+        setRootViewController(mainViewController)
     }
 }
 
