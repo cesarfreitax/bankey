@@ -50,6 +50,7 @@ extension SummaryCell {
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = UIFont.preferredFont(forTextStyle: .body)
+        nameLabel.adjustsFontSizeToFitWidth = true
         nameLabel.text = "Account name"
         
         contentView.addSubview(nameLabel)
@@ -69,6 +70,7 @@ extension SummaryCell {
         balanceAmountLabel.font = UIFont.preferredFont(forTextStyle: .body)
 //        balanceAmountLabel.text = "$100.00"
         balanceAmountLabel.attributedText = makeFormattedBalance(dollars: "984,23", cents: "05")
+        balanceAmountLabel.adjustsFontSizeToFitWidth = true
         balanceStackView.addArrangedSubview(balanceAmountLabel)
         
         balanceDetailsImageButton.translatesAutoresizingMaskIntoConstraints = false
