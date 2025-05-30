@@ -12,6 +12,7 @@ protocol LoginViewControllerDelegate: AnyObject {
 }
 
 class LoginViewController: UIViewController {
+    let loginHeaderView = LoginHeaderView()
     let loginView = LoginView()
     let signInButton = UIButton()
     let errorText = UILabel()
@@ -57,11 +58,15 @@ extension LoginViewController {
 
 
     func setupLayout() {
+        view.addSubview(loginHeaderView)
         view.addSubview(loginView)
         view.addSubview(signInButton)
         view.addSubview(errorText)
         
         NSLayoutConstraint.activate([
+            loginHeaderView.leftAnchor.constraint(equalToSystemSpacingAfter: view.leftAnchor, multiplier: 2),
+            view.trailingAnchor.constraint(equalToSystemSpacingAfter: loginHeaderView.trailingAnchor, multiplier: 2),
+            loginView.topAnchor.constraint(equalToSystemSpacingBelow: loginHeaderView.bottomAnchor, multiplier: 2),
             loginView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             loginView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 1),
             view.trailingAnchor.constraint(equalToSystemSpacingAfter: loginView.trailingAnchor, multiplier: 1),
