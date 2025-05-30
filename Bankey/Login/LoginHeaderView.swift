@@ -12,6 +12,11 @@ class LoginHeaderView: UIView {
     let subtitleLabel = UILabel()
     let stackView = UIStackView()
     
+    public var titleLabelAlpha: CGFloat {
+        get { titleLabel.alpha }
+        set { titleLabel.alpha = newValue }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupStyle()

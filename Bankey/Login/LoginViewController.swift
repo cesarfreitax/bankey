@@ -54,6 +54,8 @@ extension LoginViewController {
     func setupStyle() {
         loginView.translatesAutoresizingMaskIntoConstraints = false
         
+        loginHeaderView.titleLabelAlpha = 0
+        
         signInButton.translatesAutoresizingMaskIntoConstraints = false
         signInButton.setTitle("Sign In", for: .normal)
         signInButton.configuration = .filled()
@@ -133,5 +135,12 @@ extension LoginViewController {
             self.view.layoutIfNeeded()
         }
         animator1.startAnimation()
+        self.view.layoutIfNeeded()
+        
+        let animator2 = UIViewPropertyAnimator(duration: 0.25, curve: .easeInOut) {
+            self.loginHeaderView.titleLabelAlpha = 1
+            self.view.layoutIfNeeded()
+        }
+        animator2.startAnimation(afterDelay: 0.2)
     }
 }
