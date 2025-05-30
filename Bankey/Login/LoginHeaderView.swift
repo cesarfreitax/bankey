@@ -8,8 +8,8 @@
 import UIKit
 
 class LoginHeaderView: UIView {
-    let screenTitle = UILabel()
-    let screenSubtitle = UILabel()
+    let titleLabel = UILabel()
+    let subtitleLabel = UILabel()
     let stackView = UIStackView()
     
     override init(frame: CGRect) {
@@ -31,27 +31,26 @@ extension LoginHeaderView {
         stackView.axis = .vertical
         stackView.spacing = 4
         
-        screenTitle.translatesAutoresizingMaskIntoConstraints = false
-        screenTitle.text = "Bankey"
-        screenTitle.font = .systemFont(ofSize: 24, weight: .regular)
-        screenTitle.textAlignment = .center
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.text = "Bankey"
+        titleLabel.font = .systemFont(ofSize: 24, weight: .regular)
+        titleLabel.textAlignment = .center
         
-        screenSubtitle.translatesAutoresizingMaskIntoConstraints = false
-        screenSubtitle.text = "Start using the best banking app ever"
-        screenSubtitle.textAlignment = .center
+        subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        subtitleLabel.text = "Start using the best banking app ever"
+        subtitleLabel.textAlignment = .center
     }
     
     func setupLayout() {
-        stackView.addArrangedSubview(screenTitle)
-        stackView.addArrangedSubview(screenSubtitle)
+        stackView.addArrangedSubview(titleLabel)
+        stackView.addArrangedSubview(subtitleLabel)
         addSubview(stackView)
         
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1),
             stackView.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 1),
             trailingAnchor.constraint(equalToSystemSpacingAfter: stackView.trailingAnchor, multiplier: 1),
-            bottomAnchor.constraint(equalToSystemSpacingBelow: stackView.bottomAnchor, multiplier: 1)
+            bottomAnchor.constraint(equalToSystemSpacingBelow: stackView.bottomAnchor, multiplier: 1),
         ])
-            
     }
 }

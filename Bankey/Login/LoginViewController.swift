@@ -27,6 +27,12 @@ class LoginViewController: UIViewController {
         loginView.passwordTextField.text
     }
     
+    // Animation
+    var leadingEdgeOnScreen: CGFloat = 16
+    var leadingEdgeOffScreen: CGFloat = -1000
+    
+    var headerLeadingAnchor: NSLayoutConstraint?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupStyle()
@@ -36,6 +42,11 @@ class LoginViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         signInButton.configuration?.showsActivityIndicator = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        animate()
     }
 }
 
@@ -64,7 +75,6 @@ extension LoginViewController {
         view.addSubview(errorText)
         
         NSLayoutConstraint.activate([
-            loginHeaderView.leftAnchor.constraint(equalToSystemSpacingAfter: view.leftAnchor, multiplier: 2),
             view.trailingAnchor.constraint(equalToSystemSpacingAfter: loginHeaderView.trailingAnchor, multiplier: 2),
             loginView.topAnchor.constraint(equalToSystemSpacingBelow: loginHeaderView.bottomAnchor, multiplier: 2),
             loginView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -77,6 +87,9 @@ extension LoginViewController {
             errorText.leadingAnchor.constraint(equalTo: loginView.leadingAnchor),
             errorText.trailingAnchor.constraint(equalTo: loginView.trailingAnchor)
         ])
+        
+        headerLeadingAnchor = loginHeaderView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leadingEdgeOffScreen)
+        headerLeadingAnchor?.isActive = true
     }
 }
 
@@ -109,5 +122,16 @@ extension LoginViewController {
     private func showErrorMessage(withMessage message: String) {
         errorText.text = message
         errorText.isHidden = false
+    }
+}
+
+// MARK: - Animations
+extension LoginViewController {
+    private func animate() {
+        let animator1 = UIViewPropertyAnimator(duration: 0.25, curve: .easeInOut) {
+            self.headerLeadingAnchor?.constant = self.leadingEdgeOnScreen
+            self.view.layoutIfNeeded()
+        }
+        animator1.startAnimation()
     }
 }
