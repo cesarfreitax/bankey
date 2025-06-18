@@ -100,12 +100,12 @@ extension LoginViewController {
         errorText.isHidden = true
         
         guard let username = usernameText, let password = passwordText else {
-            showErrorMessage(withMessage: "Username / password can not be nil!")
+            handleError(withMessage: "Username / password can not be nil!")
             return
         }
         
         if username.isEmpty || password.isEmpty {
-            showErrorMessage(withMessage: "Username / password can not be blank!")
+            handleError(withMessage: "Username / password can not be blank!")
             return
         }
         
@@ -113,17 +113,19 @@ extension LoginViewController {
             signInButton.configuration?.showsActivityIndicator = true
             signInButton.configuration?.imagePadding = 6
             delegate?.didLogin()
-            
+            return
         } else {
-            showErrorMessage(withMessage: "Username / password incorrect!")
+            handleError(withMessage: "Username / password incorrect!")
+            return
         }
         
-        return
+        
     }
     
-    private func showErrorMessage(withMessage message: String) {
+    private func handleError(withMessage message: String) {
         errorText.text = message
         errorText.isHidden = false
+        shakeButton()
     }
 }
 
@@ -142,5 +144,16 @@ extension LoginViewController {
             self.view.layoutIfNeeded()
         }
         animator2.startAnimation(afterDelay: 0.2)
+    }
+    
+    private func shakeButton() {
+        let animation = CAKeyframeAnimation()
+        animation.keyPath = "position.x"
+        animation.values = [0, 10, -10, 10, 0]
+        animation.keyTimes = [0, 0.16, 0.5, 0.83, 1]
+        animation.duration = 0.4
+        
+        animation.isAdditive = true
+        signInButton.layer.add(animation, forKey: "shake")
     }
 }
