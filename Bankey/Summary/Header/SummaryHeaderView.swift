@@ -10,6 +10,8 @@ import UIKit
 class SummaryHeaderView: UIView {
     @IBOutlet var view: UIView!
     
+    let shakeyBellView = ShakeyBellView()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -21,13 +23,16 @@ class SummaryHeaderView: UIView {
     }
     
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: UIView.noIntrinsicMetric, height: 144)
+        return CGSize(width: UIView.noIntrinsicMetric, height: 1000)
     }
     
     private func commonInit() {
         let bundle = Bundle(for: SummaryHeaderView.self)
         bundle.loadNibNamed("SummaryHeaderView", owner: self, options: nil)
         addSubview(view)
+        
+        setupShakeyBell()
+        
         view.backgroundColor = appColor
         
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -38,4 +43,15 @@ class SummaryHeaderView: UIView {
     }
 }
 
+extension SummaryHeaderView {
+    private func setupShakeyBell() {
+        shakeyBellView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(shakeyBellView)
+        
+        NSLayoutConstraint.activate([
+            shakeyBellView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            shakeyBellView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+    }
+}
 

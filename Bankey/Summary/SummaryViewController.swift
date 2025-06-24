@@ -88,6 +88,7 @@ extension SummaryViewController: UITableViewDelegate {
         
         var size = header.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         size.width = UIScreen.main.bounds.width
+        size.height = 150
         header.frame.size = size
         
         tableView.tableHeaderView = header
