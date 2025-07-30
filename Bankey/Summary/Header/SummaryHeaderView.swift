@@ -9,8 +9,21 @@ import UIKit
 
 class SummaryHeaderView: UIView {
     @IBOutlet var view: UIView!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var welcomeLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
     
     let shakeyBellView = ShakeyBellView()
+    
+    struct ViewModel {
+        let welcomeMessage: String
+        let name: String
+        let date: Date
+        
+        var dateFormatted: String {
+            return date.monthDayYearString
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -52,6 +65,12 @@ extension SummaryHeaderView {
             shakeyBellView.trailingAnchor.constraint(equalTo: trailingAnchor),
             shakeyBellView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
+    }
+    
+    func configure(viewModel: ViewModel) {
+        nameLabel.text = viewModel.name
+        welcomeLabel.text = viewModel.welcomeMessage
+        dateLabel.text = viewModel.dateFormatted
     }
 }
 

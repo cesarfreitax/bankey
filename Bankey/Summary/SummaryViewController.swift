@@ -8,9 +8,16 @@
 import UIKit
 
 class SummaryViewController: UIViewController { 
+    // Request Models
+    var profile: Profile?
+    var accounts: [Account] = []
     
-    var accounts: [SummaryCell.ViewModel] = []
+    // View Models
+    var headerViewModel = SummaryHeaderView.ViewModel(welcomeMessage: "Welcome", name: "", date: Date())
+    var accountCellViewModels: [SummaryCell.ViewModel] = []
+    
     var tableView = UITableView()
+    let headerView = SummaryHeaderView(frame: .zero)
     
     lazy var logoutBarButtonItem: UIBarButtonItem = {
         let barButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logoutTapped))
@@ -34,7 +41,8 @@ extension SummaryViewController {
         setupNavigationBar()
         setupTableView()
         setupTableHeaderView()
-        fetchData()
+//        fetchAccounts()
+        fetchDataAndLoadViews()
     }
     
     private func setupTableView() {
@@ -61,19 +69,19 @@ extension SummaryViewController {
 
 extension SummaryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard !accounts.isEmpty else {
+        guard !accountCellViewModels.isEmpty else {
             return UITableViewCell()
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: SummaryCell.reuseID, for: indexPath) as! SummaryCell
-        let account = accounts[indexPath.row]
+        let account = accountCellViewModels[indexPath.row]
         cell.configure(with: account)
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return accounts.count
+        return accountCellViewModels.count
     }
 }
 
@@ -84,45 +92,50 @@ extension SummaryViewController: UITableViewDelegate {
 
 
     private func setupTableHeaderView() {
-        let header = SummaryHeaderView(frame: .zero)
-        
-        var size = header.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        var size = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         size.width = UIScreen.main.bounds.width
         size.height = 150
-        header.frame.size = size
+        headerView.frame.size = size
         
-        tableView.tableHeaderView = header
+        tableView.tableHeaderView = headerView
     }
 }
 
 extension SummaryViewController {
-    private func fetchData() {
-        let savings = SummaryCell.ViewModel(accountType: .Banking,
-                                                                accountName: "Basic Savings",
-                                                            balance: 929466.23)
-            let chequing = SummaryCell.ViewModel(accountType: .Banking,
-                                                        accountName: "No-Fee All-In Chequing",
-                                                        balance: 17562.44)
-            let visa = SummaryCell.ViewModel(accountType: .CreditCard,
-                                                           accountName: "Visa Avion Card",
-                                                           balance: 412.83)
-            let masterCard = SummaryCell.ViewModel(accountType: .CreditCard,
-                                                           accountName: "Student Mastercard",
-                                                           balance: 50.83)
-            let investment1 = SummaryCell.ViewModel(accountType: .Investment,
-                                                           accountName: "Tax-Free Saver",
-                                                           balance: 2000.00)
-            let investment2 = SummaryCell.ViewModel(accountType: .Investment,
-                                                           accountName: "Growth Fund",
-                                                           balance: 15000.00)
-
-            accounts.append(savings)
-            accounts.append(chequing)
-            accounts.append(visa)
-            accounts.append(masterCard)
-            accounts.append(investment1)
-            accounts.append(investment2)
+    private func fetchDataAndLoadViews() {
+        fetchProfile(forUserId: "1") { result in
+            switch result {
+            case .success(let profile):
+                self.profile = profile
+                self.configureTableHeaderView(with: profile)
+                self.tableView.reloadData()
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
         }
+        
+        fetchAccounts(forUserId: "1") { result in
+            switch result {
+            case .success(let accounts):
+                self.accounts = accounts
+                self.configureTableCells(with: accounts)
+                self.tableView.reloadData()
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    private func configureTableHeaderView(with profile: Profile) {
+        let vm = SummaryHeaderView.ViewModel(welcomeMessage: "Good morning", name: profile.firstName, date: Date())
+        headerView.configure(viewModel: vm)
+    }
+    
+    private func configureTableCells(with accounts: [Account]) {
+        accountCellViewModels = accounts.map { account in
+            SummaryCell.ViewModel(accountType: account.type, accountName: account.name, balance: account.amount)
+        }
+    }
 }
 
 extension SummaryViewController {

@@ -7,6 +7,12 @@
 
 import UIKit
 
+enum AccountType: String, Codable {
+    case Banking
+    case CreditCard
+    case Investment
+}
+
 class SummaryCell: UITableViewCell {
     let typeLabel = UILabel()
     let underlineView = UIView()
@@ -124,12 +130,6 @@ extension SummaryCell {
 }
 
 extension SummaryCell {
-    enum AccountType: String {
-        case Banking
-        case CreditCard
-        case Investment
-    }
-    
     struct ViewModel {
         let accountType: AccountType
         let accountName: String
