@@ -18,6 +18,7 @@ class SummaryViewController: UIViewController {
     
     var tableView = UITableView()
     let headerView = SummaryHeaderView(frame: .zero)
+    let refreshControl = UIRefreshControl()
     
     lazy var logoutBarButtonItem: UIBarButtonItem = {
         let barButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logoutTapped))
@@ -37,14 +38,22 @@ class SummaryViewController: UIViewController {
 
 extension SummaryViewController {
     private func setup() {
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         setupNavigationBar()
         setupTableView()
         setupTableHeaderView()
+        setupRefreshControl()
         fetchData()
     }
     
+    private func setupRefreshControl() {
+        refreshControl.tintColor = appColor
+        refreshControl.addTarget(self, action: #selector(refreshContent), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+    }
+    
     private func setupTableView() {
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
         tableView.backgroundColor = appColor
         tableView.delegate = self
         tableView.dataSource = self
@@ -104,8 +113,10 @@ extension SummaryViewController {
     private func fetchData() {
         let group = DispatchGroup()
         
+        let userId = String(Int.random(in: 1..<4))
+        
         group.enter()
-        fetchProfile(forUserId: "1") { result in
+        fetchProfile(forUserId: userId) { result in
             switch result {
             case .success(let profile):
                 self.profile = profile
@@ -117,7 +128,7 @@ extension SummaryViewController {
         }
         
         group.enter()
-        fetchAccounts(forUserId: "1") { result in
+        fetchAccounts(forUserId: userId) { result in
             switch result {
             case .success(let accounts):
                 self.accounts = accounts
@@ -130,6 +141,7 @@ extension SummaryViewController {
         
         group.notify(queue: .main) {
             self.tableView.reloadData()
+            self.tableView.refreshControl?.endRefreshing()
         }
     }
     
@@ -148,6 +160,10 @@ extension SummaryViewController {
 extension SummaryViewController {
     @objc func logoutTapped(sender: UIButton) {
         NotificationCenter.default.post(name: .logout, object: nil)
+    }
+    
+    @objc func refreshContent() {
+        fetchData()
     }
 }
 
