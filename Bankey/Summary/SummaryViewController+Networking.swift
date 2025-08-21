@@ -40,7 +40,7 @@ extension SummaryViewController {
                     let profile = try JSONDecoder().decode(Profile.self, from: data)
                     completion(.success(profile))
                 } catch {
-                    completion(.failure(.decodingError))
+        completion(.failure(.serverError))
                 }
             }
         }.resume()

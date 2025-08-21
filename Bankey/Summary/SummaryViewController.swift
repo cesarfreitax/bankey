@@ -135,7 +135,7 @@ extension SummaryViewController {
                 self.profile = profile
                 self.configureTableHeaderView(with: profile)
             case .failure(let error):
-                print(error.localizedDescription)
+                self.showNetworkErrorAlert(error: error)
             }
             group.leave()
         }
@@ -168,6 +168,28 @@ extension SummaryViewController {
         accountCellViewModels = accounts.map { account in
             SummaryCell.ViewModel(accountType: account.type, accountName: account.name, balance: account.amount)
         }
+    }
+    
+    private func showNetworkErrorAlert(error: NetworkError) {
+        var title: String
+        var message: String
+        
+        switch (error) {
+        case .serverError:
+            title = "Server Error"
+            message = "Ensure you are connected to the internet. Please try again."
+        case .decodingError:
+            title = "Decoding Error"
+            message = "We could not process your request. Please try again."
+        }
+        
+        let alert = UIAlertController(title: title,
+                                      message: message,
+                                      preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        present(alert, animated: true, completion: nil)
     }
 }
 
