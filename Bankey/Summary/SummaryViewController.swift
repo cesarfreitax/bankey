@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SummaryViewController: UIViewController { 
+class SummaryViewController: UIViewController, UITableViewDelegate { 
     // Request Models
     var profile: Profile?
     var accounts: [Account] = []
@@ -19,6 +19,8 @@ class SummaryViewController: UIViewController {
     var tableView = UITableView()
     let headerView = SummaryHeaderView(frame: .zero)
     let refreshControl = UIRefreshControl()
+    
+    var profileManager = ProfileManager()
     
     var isLoaded = false
     
@@ -104,10 +106,8 @@ extension SummaryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return accountCellViewModels.count
     }
-}
-
-extension SummaryViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    
+    @objc(tableView:didSelectRowAtIndexPath:) func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
     }
 
@@ -120,44 +120,6 @@ extension SummaryViewController: UITableViewDelegate {
         
         tableView.tableHeaderView = headerView
     }
-}
-
-extension SummaryViewController {
-    private func fetchData() {
-        let group = DispatchGroup()
-        
-        let userId = String(Int.random(in: 1..<4))
-        
-        group.enter()
-        fetchProfile(forUserId: userId) { result in
-            switch result {
-            case .success(let profile):
-                self.profile = profile
-                self.configureTableHeaderView(with: profile)
-            case .failure(let error):
-                self.showNetworkErrorAlert(error: error)
-            }
-            group.leave()
-        }
-        
-        group.enter()
-        fetchAccounts(forUserId: userId) { result in
-            switch result {
-            case .success(let accounts):
-                self.accounts = accounts
-                self.configureTableCells(with: accounts)
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-            group.leave()
-        }
-        
-        group.notify(queue: .main) {
-            self.isLoaded = true
-            self.tableView.reloadData()
-            self.tableView.refreshControl?.endRefreshing()
-        }
-    }
     
     private func configureTableHeaderView(with profile: Profile) {
         let vm = SummaryHeaderView.ViewModel(welcomeMessage: "Good morning", name: profile.firstName, date: Date())
@@ -169,10 +131,74 @@ extension SummaryViewController {
             SummaryCell.ViewModel(accountType: account.type, accountName: account.name, balance: account.amount)
         }
     }
+}
+
+
+extension SummaryViewController {
+    private func fetchData() {
+        let group = DispatchGroup()
+        let userId = String(Int.random(in: 1..<4))
+        
+        fetchProfile(group, userId)
+        fetchAccounts(group, userId)
+        refreshTable(group)
+    }
     
-    private func showNetworkErrorAlert(error: NetworkError) {
-        var title: String
-        var message: String
+    private func fetchProfile(_ group: DispatchGroup, _ userId: String) {
+        group.enter()
+        profileManager.fetchProfile(forUserId: userId) { result in
+            switch result {
+            case .success(let profile):
+                self.profile = profile
+                self.configureTableHeaderView(with: profile)
+            case .failure(let error):
+                self.displayError(error: error)
+            }
+            group.leave()
+        }
+    }
+    
+    private func fetchAccounts(_ group: DispatchGroup, _ userId: String) {
+        group.enter()
+        fetchAccounts(forUserId: userId) { result in
+            switch result {
+            case .success(let accounts):
+                self.accounts = accounts
+                self.configureTableCells(with: accounts)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+            group.leave()
+        }
+    }
+    
+    private func refreshTable(_ group: DispatchGroup) {
+        group.notify(queue: .main) {
+            self.isLoaded = true
+            self.tableView.reloadData()
+            self.tableView.refreshControl?.endRefreshing()
+        }
+    }
+    
+    private func showErrorAlert(_ message: (String, String)) {
+        let alert = UIAlertController(title: message.0,
+                                      message: message.1,
+                                      preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    private func displayError(error: NetworkError) {
+        let message = titleAndMessage(for: error)
+        
+        showErrorAlert(message)
+    }
+    
+    private func titleAndMessage(for error: NetworkError) -> (String, String) {
+        let title: String
+        let message: String
         
         switch (error) {
         case .serverError:
@@ -183,13 +209,7 @@ extension SummaryViewController {
             message = "We could not process your request. Please try again."
         }
         
-        let alert = UIAlertController(title: title,
-                                      message: message,
-                                      preferredStyle: .alert)
-        
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        
-        present(alert, animated: true, completion: nil)
+        return (title, message)
     }
 }
 
@@ -200,6 +220,12 @@ extension SummaryViewController {
     
     @objc func refreshContent() {
         fetchData()
+    }
+}
+
+extension SummaryViewController {
+    func titleAndMessageForTesting(for error: NetworkError) -> (String, String) {
+        return titleAndMessage(for: error)
     }
 }
 
