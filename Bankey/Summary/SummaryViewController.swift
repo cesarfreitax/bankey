@@ -20,7 +20,13 @@ class SummaryViewController: UIViewController, UITableViewDelegate {
     let headerView = SummaryHeaderView(frame: .zero)
     let refreshControl = UIRefreshControl()
     
-    var profileManager = ProfileManager()
+    var profileManager: ProfileManageable = ProfileManager()
+    
+    lazy var errorAlert: UIAlertController = {
+        let alert =  UIAlertController(title: "", message: "", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        return alert
+    }()
     
     var isLoaded = false
     
@@ -180,14 +186,11 @@ extension SummaryViewController {
         }
     }
     
-    private func showErrorAlert(_ message: (String, String)) {
-        let alert = UIAlertController(title: message.0,
-                                      message: message.1,
-                                      preferredStyle: .alert)
+    private func showErrorAlert(_ message: (String, String)) {        
+        errorAlert.title = message.0
+        errorAlert.message = message.1
         
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        
-        present(alert, animated: true, completion: nil)
+        present(errorAlert, animated: true, completion: nil)
     }
     
     private func displayError(error: NetworkError) {
@@ -203,10 +206,10 @@ extension SummaryViewController {
         switch (error) {
         case .serverError:
             title = "Server Error"
-            message = "Ensure you are connected to the internet. Please try again."
+            message = "We could not process your request. Please try again."
         case .decodingError:
             title = "Decoding Error"
-            message = "We could not process your request. Please try again."
+            message = "Ensure you are connected to the internet. Please try again."
         }
         
         return (title, message)
@@ -226,6 +229,10 @@ extension SummaryViewController {
 extension SummaryViewController {
     func titleAndMessageForTesting(for error: NetworkError) -> (String, String) {
         return titleAndMessage(for: error)
+    }
+    
+    func fetchProfileForTesting() {
+        fetchProfile(DispatchGroup(), "1")
     }
 }
 
